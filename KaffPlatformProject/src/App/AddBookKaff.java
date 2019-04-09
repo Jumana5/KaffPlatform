@@ -28,7 +28,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
 public class AddBookKaff {
-
+// just test from eclips
 	protected Shell shell;
 	private Text BookTitleTxt;
 	private Text editionTxt;
@@ -83,17 +83,6 @@ public class AddBookKaff {
 		shell.setSize(599, 779);
 		shell.setText("إضافة كتاب جديد");
 
-		Button logoBtn = new Button(shell, SWT.NONE);
-		logoBtn.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				MainMenuKaff mm = new MainMenuKaff();
-				shell.close();
-				mm.open();
-			}
-		});
-		logoBtn.setImage(logoBtnBack);
-		logoBtn.setBounds(497, 0, 64, 50);
 
 		Label headerLabel = new Label(shell, SWT.NONE);
 		headerLabel.setImage(header);
@@ -187,7 +176,7 @@ public class AddBookKaff {
 
 		ownerIDValue = new Text(shell, SWT.BORDER);
 		ownerIDValue.setBounds(204, 444, 186, 24);
-		// need to check if the owner is already in the database...
+
 
 		Label nameLabel = new Label(shell, SWT.NONE);
 		nameLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -195,17 +184,10 @@ public class AddBookKaff {
 		nameLabel.setBounds(415, 481, 119, 28);
 		nameLabel.setText("الاسم الثلاثي");
 
-		nameTxt = new Text(shell, SWT.BORDER);
-		nameTxt.setBounds(56, 485, 334, 24);
-
 		Label phoneLabel = new Label(shell, SWT.NONE);
 		phoneLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		phoneLabel.setFont(SWTResourceManager.getFont("B Badr", 12, SWT.NORMAL));
 		phoneLabel.setText("رقم الجوال");
-		phoneLabel.setBounds(415, 515, 119, 27);
-
-		phoneTxt = new Text(shell, SWT.BORDER);
-		phoneTxt.setBounds(204, 521, 186, 24);
 
 		Label ownerLvlLabel = new Label(shell, SWT.NONE);
 		ownerLvlLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -225,7 +207,6 @@ public class AddBookKaff {
 		emailLabel.setText("البريد الإلكتروني");
 
 		emailTxt = new Text(shell, SWT.BORDER);
-		emailTxt.setBounds(56, 586, 334, 24);
 
 		Button addButton = new Button(shell, SWT.NONE);
 		addButton.addSelectionListener(new SelectionAdapter() {
@@ -354,6 +335,7 @@ public class AddBookKaff {
 		backButton.setFont(SWTResourceManager.getFont("B Badr", 12, SWT.NORMAL));
 		backButton.setBounds(150, 666, 85, 26);
 		backButton.setText("رجوع");
+
 
 		Label label = new Label(shell, SWT.NONE);
 		label.setFont(SWTResourceManager.getFont("B Badr", 14, SWT.BOLD));
