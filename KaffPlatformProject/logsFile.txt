@@ -1,0 +1,4 @@
+$$  WELCOME IN KAFF PLATFORM  $$
+>> main menu has opened
+
+$$  KAFF PLATFORM HAS CLOSED $$

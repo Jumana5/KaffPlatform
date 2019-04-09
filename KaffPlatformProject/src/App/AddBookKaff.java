@@ -3,6 +3,7 @@ package App;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Monitor;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +25,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 
@@ -44,15 +46,11 @@ public class AddBookKaff {
 	public Image header = SWTResourceManager.getImage("\\images\\KaffPlatformheader.jpg");
 	public Image signOutIcon = SWTResourceManager.getImage("/images/signout small.png");
 
-	/**
-	 * Launch the application.
-	 * 
-	 * @param args
-	 */
 	public static void main(String[] args) {
 		try {
 			AddBookKaff window = new AddBookKaff();
 			window.open();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -67,6 +65,15 @@ public class AddBookKaff {
 		createContents();
 		shell.open();
 		shell.layout();
+		 Monitor primary = display.getPrimaryMonitor();
+			Rectangle bounds = primary.getBounds();
+			Rectangle rect = shell.getBounds();
+			 int x = bounds.x + (bounds.width - rect.width) / 2;
+			 int y = bounds.y + (bounds.height - rect.height) / 2;
+
+			    /** set the new location */
+			shell.setLocation(x, y);
+			
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -79,6 +86,7 @@ public class AddBookKaff {
 	 */
 	protected void createContents() {
 		shell = new Shell();
+		shell.setImage(SWTResourceManager.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\bin\\logo very small.png"));
 		shell.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		shell.setSize(599, 779);
 		shell.setText("إضافة كتاب جديد");
@@ -92,11 +100,11 @@ public class AddBookKaff {
 				mm.open();
 			}
 		});
-		logoBtn.setImage(logoBtnBack);
+		logoBtn.setImage(SWTResourceManager.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\bin\\logo for header button.png"));
 		logoBtn.setBounds(497, 0, 64, 50);
 
 		Label headerLabel = new Label(shell, SWT.NONE);
-		headerLabel.setImage(header);
+		headerLabel.setImage(SWTResourceManager.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\bin\\KaffPlatformheader.jpg"));
 		headerLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		headerLabel.setBounds(0, 0, 607, 50);
 
@@ -365,7 +373,7 @@ public class AddBookKaff {
 		Label label_1 = new Label(shell, SWT.NONE);
 		label_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		label_1.setFont(SWTResourceManager.getFont("B Badr", 12, SWT.ITALIC));
-		label_1.setBounds(23, 79, 186, 32);
+		label_1.setBounds(387, 88, 186, 32);
 		// get user name here to display
 		String name = getUserName();
 		label_1.setText("مرحباً ..." + name);
@@ -374,7 +382,18 @@ public class AddBookKaff {
 		bookIDTxt.setBounds(271, 170, 119, 24);
 
 		Button signOutButton = new Button(shell, SWT.NONE);
-		signOutButton.setBounds(539, 44, 34, 35);
+		signOutButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				SearchFrame sf = new SearchFrame();
+				files.addRecords("Search button has clicked");
+				System.out.println("Search button has clicked");
+				shell.close();
+				sf.open();
+			}
+		});
+		signOutButton.setImage(SWTResourceManager.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\bin\\signout small.png"));
+		signOutButton.setBounds(10, 58, 34, 35);
 
 	}
 
