@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Combo;
 
 public class BooksDisplayInfoFrame {
-
+// just test 2
 	protected Shell shell;
 	private Table booksTable;
 	private Text text;

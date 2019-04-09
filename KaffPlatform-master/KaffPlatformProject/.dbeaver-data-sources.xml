@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-sources>
+	<folder name="DB"/>
+	<data-source id="mysql8-1697191e226-3f8914bdb21ec941" provider="mysql" driver="mysql8" name="MySQL 8.x - University" save-password="true" read-only="false">
+		<connection host="localhost" port="3306" server="" database="University" url="jdbc:mysql://localhost:3306/University" user="root" password="AQsJNBARF3bk" home="C:\Program Files\MySQL\MySQL Router 8.0" type="dev">
+			<property name="allowPublicKeyRetrieval" value="TRUE"/>
+			<property name="connectTimeout" value="20000"/>
+		</connection>
+	</data-source>
+	<data-source id="mysql8-169753e3316-20d35ee391d81bd5" provider="mysql" driver="mysql8" name="MySQL 8.x - company" save-password="true" read-only="false" folder="DB">
+		<connection host="localhost" port="3306" server="" database="company" url="jdbc:mysql://localhost:3306/company" user="root" password="AQsJNBARF3bk" home="C:\Program Files\MySQL\MySQL Router 8.0" type="dev">
+			<property name="allowPublicKeyRetrieval" value="TRUE"/>
+			<property name="connectTimeout" value="20000"/>
+			<network-handler type="PROXY" id="socks_proxy" enabled="false" save-password="true">
+				<property name="socks-port" value="1080"/>
+			</network-handler>
+			<network-handler type="TUNNEL" id="ssh_tunnel" enabled="false" save-password="true">
+				<property name="sshConnectTimeout" value="10000"/>
+				<property name="port" value="22"/>
+				<property name="implementation" value="jsch"/>
+				<property name="authType" value="PASSWORD"/>
+			</network-handler>
+			<network-handler type="CONFIG" id="mysql_ssl" enabled="false" save-password="true">
+				<property name="ssl.public.key.retrieve" value="false"/>
+				<property name="ssl.verify.server" value="true"/>
+				<property name="ssl.require" value="false"/>
+			</network-handler>
+		</connection>
+	</data-source>
+	<data-source id="mysql8-1699579aaee-1d06a51bbb5445f0" provider="mysql" driver="mysql8" name="MySQL 8.x - store" save-password="true" read-only="false" folder="DB">
+		<connection host="localhost" port="3306" server="" database="store" url="jdbc:mysql://localhost:3306/store" user="root" password="AQsJNBARF3bk" home="C:\Program Files\MySQL\MySQL Router 8.0" type="dev">
+			<property name="allowPublicKeyRetrieval" value="TRUE"/>
+			<property name="connectTimeout" value="20000"/>
+		</connection>
+	</data-source>
+	<filters/>
+</data-sources>
