@@ -124,7 +124,7 @@ public class Combobox {
 			}
 		});
 		btnNewButton_1.setBounds(171, 200, 210, 32);
-		btnNewButton_1.setText("تعديل معلومات الكتاب");
+		btnNewButton_1.setText("عرض وتعديل معلومات الكتب");
 		
 		Button btnNewButton_2 = new Button(shell, SWT.NONE);
 		btnNewButton_2.addSelectionListener(new SelectionAdapter() {
@@ -136,7 +136,7 @@ public class Combobox {
 			}
 		});
 		btnNewButton_2.setBounds(171, 258, 210, 32);
-		btnNewButton_2.setText("عرض معلومات الكتب او المستخدمين");
+		btnNewButton_2.setText("عرض وتعديل معلومات المستخدمين");
 
 	}
 }
