@@ -31,7 +31,7 @@ public abstract class Database {
 
 	public static void openConnection() throws SQLException {
 		String url = "jdbc:mysql://localhost:3306/kaff";
-		connection = DriverManager.getConnection(url, "root", "root123");
+		connection = DriverManager.getConnection(url, "root", "Sob7anallah");
 		statement = connection.createStatement();
 	}
 

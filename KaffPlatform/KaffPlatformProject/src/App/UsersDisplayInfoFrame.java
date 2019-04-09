@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Group;
@@ -24,6 +25,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class UsersDisplayInfoFrame {
 
@@ -63,6 +66,7 @@ public class UsersDisplayInfoFrame {
 	 */
 	protected void createContents() {
 		shell = new Shell();
+		shell.setBackground(SWTResourceManager.getColor(255, 255, 255));
 		shell.setBackgroundImage(SWTResourceManager
 				.getImage("C:\\Users\\Admin\\git\\KaffPlatform\\KaffPlatformProject\\img\\Background.jpeg"));
 		// shell.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
@@ -112,8 +116,9 @@ public class UsersDisplayInfoFrame {
 		fd_viewForm.left = new FormAttachment(0, 33);
 		viewForm.setLayoutData(fd_viewForm);
 
-		String Query = "SELECT * FROM kaff.user";
+		String Query = "select userID,fname,phone,userLevel,email from kaff.user";
 		table = new Table(viewForm, SWT.BORDER | SWT.FULL_SELECTION);
+
 		TableColumn column1 = new TableColumn(table, SWT.RIGHT);
 		TableColumn column2 = new TableColumn(table, SWT.RIGHT);
 		TableColumn column3 = new TableColumn(table, SWT.RIGHT);
@@ -132,23 +137,66 @@ public class UsersDisplayInfoFrame {
 		column4.setWidth(80);
 		column5.setWidth(170);
 
+//		TableItem item1 = new TableItem(table, SWT.NONE);
+	//	item1.setText(new String[] { "2170008191", "مريم", "05522334444", "6", "meme@g.com" });
+		//TableItem item2 = new TableItem(table, SWT.NONE);
+//		item2.setText(new String[] { "2170008191", "مريم", "05522334444", "6", "meme@g.com" });
+	//	TableItem item3 = new TableItem(table, SWT.NONE);
+		//item3.setText(new String[] { "2170008191", "مريم", "05522334444", "6", "meme@g.com" });
+//		TableItem item4 = new TableItem(table, SWT.NONE);
+	//	item4.setText(new String[] { "2170008191", "مريم", "05522334444", "6", "meme@g.com" });
+
 		viewForm.setContent(table);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
 
 		table.addListener(SWT.SetData, new Listener() {
 			public void handleEvent(Event event) {
-				TableItem item = (TableItem) event.item;
 				try {
 					Database.openConnection();
 					ResultSet RS = Database.getStatment().executeQuery(Query);
+					TableItem item;
+
+					// Create a new TableItem for each entry in the result set (each row)
+					item = new TableItem(table, SWT.NONE);
+
 					while (RS.next()) {
-						item.setText(new String[] { RS.getString(1), (RS.getString(2) + " " + RS.getString(3) + " " + RS.getString(4)),
-								RS.getString(5), RS.getString(6), RS.getString(7) });
+						System.out.println("test");
+						item.setText(new String[] { RS.getString(1), RS.getString(2), RS.getString(5), RS.getString(6),
+								RS.getString(7) });
 					}
+
 					Database.closeConnection();
+
 				} catch (SQLException e) {
 					e.printStackTrace();
+				}
+			}
+		});
+		
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				try {
+					String sql = "SELECT userID,fname,phone,userLevel,email from kaff.user";
+					Database.openConnection();
+					ResultSet rs = Database.getStatment().executeQuery(sql);
+
+					if (rs.next()) {
+						String ID = rs.getString("userID");
+						text.setText(ID);
+						String FN = rs.getString("fname");
+						text_1.setText(FN);
+						String LN = rs.getString("phone");
+						text_2.setText(LN);
+						String Des = rs.getString("userLevel");
+						// combo.setText(Des);
+						String BS = rs.getString("email");
+						text_3.setText(BS);
+
+					}
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog(null, e1);
 				}
 			}
 		});
