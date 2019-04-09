@@ -3,30 +3,46 @@ package App;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Monitor;
 
 import java.awt.Color;
+import java.awt.Container;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import Dialogs.ErrorFrame;
+
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Composite;
 
 public class SearchFrame {
 
 	protected Shell shell;
 	private Text nkn;
-	private Text text_1;
-	private Text text_2;
-	private Text text_3;
+	private Text txtEefjn;
+	private Text text_level;
+	private Text text_price;
 
-	
 	public static void main(String[] args) {
 		try {
 			SearchFrame window = new SearchFrame();
 			window.open();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -38,8 +54,18 @@ public class SearchFrame {
 	public void open() {
 		Display display = Display.getDefault();
 		createContents();
+		files.addRecords("Search frame has opened");
+		System.out.println("Search frame has opened");
 		shell.open();
 		shell.layout();
+		Monitor primary = display.getPrimaryMonitor();
+		Rectangle bounds = primary.getBounds();
+		Rectangle rect = shell.getBounds();
+		int x = bounds.x + (bounds.width - rect.width) / 2;
+		int y = bounds.y + (bounds.height - rect.height) / 2;
+
+		/** set the new location */
+		shell.setLocation(x, y);
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -47,131 +73,202 @@ public class SearchFrame {
 		}
 	}
 
+	TestConnection test = new TestConnection();
+	ArrayList<BookInformation> results;
+	int numberOfEntries = 0;
+	int currentEntrieIndex = 0;
+	BookInformation currentEnrty;
+	private Text text_type;
+	private Text text_edition;
+	int index = 0;
+
 	/**
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
 		shell = new Shell();
+		shell.setImage(SWTResourceManager
+				.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\bin\\logo very small.png"));
 		shell.setText("\u0645\u0639\u0644\u0648\u0645\u0627\u062A \u0627\u0644\u0643\u062A\u0627\u0628");
-		shell.setImage(SWTResourceManager.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\img\\logo very small.png"));
-		shell.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\img\\Background.jpeg"));
 		shell.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
-		shell.setSize(577, 602);
-		
+		shell.setSize(582, 585);
+
+		Button btnNewButton_3 = new Button(shell, SWT.NONE);
+
+		btnNewButton_3.setBounds(279, 461, 75, 25);
+		btnNewButton_3.setText("التالي");
+		btnNewButton_3.setEnabled(false);
+
+		Button button_1 = new Button(shell, SWT.NONE);
+		button_1.setBounds(171, 461, 75, 25);
+		button_1.setText("السابق");
+		button_1.setEnabled(false);
+
+		txtEefjn = new Text(shell, SWT.BORDER | SWT.RIGHT);
+		txtEefjn.setEditable(false);
+		txtEefjn.setBounds(62, 147, 316, 31);
+
+		text_level = new Text(shell, SWT.BORDER | SWT.RIGHT);
+		text_level.setEditable(false);
+		text_level.setBounds(256, 205, 122, 31);
+
+		Button button = new Button(shell, SWT.NONE);
+		button.setToolTipText("رجــوع");
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				MainMenuKaff main = new MainMenuKaff();
+				shell.close();
+				files.addRecords("Search frame has closed");
+				System.out.println("Search frame has closed");
+				main.open();
+
+			}
+		});
+		button.setImage(SWTResourceManager.getImage("C:\\Users\\Doaa\\Pictures\\KaffPlatformheader.jpg"));
+		button.setBounds(499, 0, 57, 42);
+
 		Label lblNewLabel = new Label(shell, SWT.NONE);
 		lblNewLabel.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_BACKGROUND));
 		lblNewLabel.setFont(SWTResourceManager.getFont("Dubai", 14, SWT.BOLD));
-		lblNewLabel.setBounds(377, 57, 76, 31);
+		lblNewLabel.setBounds(403, 54, 76, 31);
 		lblNewLabel.setText("\u0627\u0644\u0628\u062D\u062B");
-		
+
 		Label lblNewLabel_1 = new Label(shell, SWT.NONE);
 		lblNewLabel_1.setAlignment(SWT.CENTER);
 		lblNewLabel_1.setForeground(SWTResourceManager.getColor(210, 105, 30));
 		lblNewLabel_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_HIGHLIGHT_SHADOW));
-		lblNewLabel_1.setFont(SWTResourceManager.getFont("Dubai", 20, SWT.BOLD));
-		lblNewLabel_1.setBounds(134, 99, 319, 48);
-		lblNewLabel_1.setText("\u0645\u0639\u0644\u0648\u0645\u0640\u0640\u0640\u0640\u0640\u0627\u062A \u0627\u0644\u0643\u062A\u0627\u0628");
-		
+		lblNewLabel_1.setFont(SWTResourceManager.getFont("Arial (Arabic)", 20, SWT.NORMAL));
+		lblNewLabel_1.setBounds(110, 99, 322, 42);
+		lblNewLabel_1.setText(
+				"\u0645\u0639\u0644\u0648\u0645\u0640\u0640\u0640\u0640\u0640\u0627\u062A \u0627\u0644\u0643\u062A\u0627\u0628");
+
 		Label lblNewLabel_2 = new Label(shell, SWT.NONE);
 		lblNewLabel_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_BACKGROUND));
-		lblNewLabel_2.setFont(SWTResourceManager.getFont("Dubai", 14, SWT.NORMAL));
-		lblNewLabel_2.setBounds(323, 147, 130, 31);
-		lblNewLabel_2.setText(":\u0623\u0633\u0645 \u0627\u0644\u0643\u062A\u0627\u0628");
-		
+		lblNewLabel_2.setFont(SWTResourceManager.getFont("Arial (Arabic)", 16, SWT.NORMAL));
+		lblNewLabel_2.setBounds(408, 147, 132, 31);
+		lblNewLabel_2.setText(":اسم الكتاب");
+
 		Label label = new Label(shell, SWT.NONE);
 		label.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_BACKGROUND));
-		label.setFont(SWTResourceManager.getFont("Dubai", 14, SWT.NORMAL));
-		label.setBounds(323, 199, 130, 31);
+		label.setFont(SWTResourceManager.getFont("Arial (Arabic)", 16, SWT.NORMAL));
+		label.setBounds(426, 199, 88, 31);
 		label.setText(":\u0627\u0644\u0645\u0633\u062A\u0648\u0649");
-		
+
 		Label label_1 = new Label(shell, SWT.NONE);
 		label_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_BACKGROUND));
-		label_1.setFont(SWTResourceManager.getFont("Dubai", 14, SWT.NORMAL));
-		label_1.setBounds(396, 248, 76, 31);
+		label_1.setFont(SWTResourceManager.getFont("Arial (Arabic)", 14, SWT.NORMAL));
+		label_1.setBounds(449, 252, 65, 31);
 		label_1.setText(":\u0627\u0644\u062D\u0627\u0644\u0647");
-		
+
 		Label label_2 = new Label(shell, SWT.NONE);
 		label_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_LIST_BACKGROUND));
-		label_2.setFont(SWTResourceManager.getFont("Dubai", 14, SWT.NORMAL));
-		label_2.setBounds(363, 303, 76, 31);
+		label_2.setFont(SWTResourceManager.getFont("Arial (Arabic)", 16, SWT.NORMAL));
+		label_2.setBounds(448, 303, 66, 31);
 		label_2.setText(":\u0627\u0644\u0633\u0639\u0631");
-		
-		Group group = new Group(shell, SWT.NONE);
-		group.setBounds(132, 375, 294, 48);
-		
-		Button btnRadioButton = new Button(group, SWT.RADIO);
-		btnRadioButton.setBounds(194, 21, 99, 31);
-		btnRadioButton.setSelection(true);
-		btnRadioButton.setFont(SWTResourceManager.getFont("Dubai", 14, SWT.NORMAL));
-		btnRadioButton.setText("\u0644\u0644\u0628\u064A\u0639");
-		btnRadioButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		Button btnRadioButton_1 = new Button(group, SWT.RADIO);
-		btnRadioButton_1.setBounds(98, 21, 90, 31);
-		btnRadioButton_1.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
-		btnRadioButton_1.setFont(SWTResourceManager.getFont("Dubai", 14, SWT.NORMAL));
-		btnRadioButton_1.setText("\u0644\u0644\u0625\u0639\u0627\u0631\u0647");
-		btnRadioButton_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		
-		Button btnRadioButton_2 = new Button(group, SWT.RADIO);
-		btnRadioButton_2.setBounds(2, 21, 90, 31);
-		btnRadioButton_2.setFont(SWTResourceManager.getFont("Dubai", 14, SWT.NORMAL));
-		btnRadioButton_2.setText("\u0645\u062C\u0627\u0646\u0627\u064B");
-		btnRadioButton_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
-		
-		nkn = new Text(shell, SWT.BORDER);
+
+		nkn = new Text(shell, SWT.BORDER | SWT.RIGHT);
+		nkn.setToolTipText("أدخل أسم الكتاب");
+
 		nkn.setForeground(SWTResourceManager.getColor(169, 169, 169));
-		nkn.setText("\u0623\u062F\u062E\u0644 \u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0643\u062A\u0627\u0628, \u0631\u0645\u0632 \u0627\u0644\u0643\u062A\u0627\u0628 \u0623\u0648 \u0627\u0644\u0645\u0633\u062A\u0648\u0649");
-		nkn.setBounds(130, 63, 222, 21);
-		
-		Button btnNewButton_2 = new Button(shell, SWT.NONE);
-		btnNewButton_2.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Doaa\\Pictures\\seach.jpg"));
-		btnNewButton_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_INFO_BACKGROUND));
-		btnNewButton_2.setImage(SWTResourceManager.getImage("C:\\Users\\Doaa\\Pictures\\search-icon-.png"));
-		
-		btnNewButton_2.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
-		btnNewButton_2.setBounds(343, 61, 25, 25);
-		
-		text_1 = new Text(shell, SWT.BORDER);
-		text_1.setBounds(135, 153, 166, 21);
-		
-		text_2 = new Text(shell, SWT.BORDER);
-		text_2.setBounds(135, 205, 167, 21);
-		
-		text_3 = new Text(shell, SWT.BORDER);
-		text_3.setBounds(116, 311, 225, 21);
-		
+		nkn.setBounds(62, 58, 296, 25);
+
 		Button btnNewButton = new Button(shell, SWT.NONE);
-		btnNewButton.setBackground(SWTResourceManager.getColor(154, 205, 50));
+		btnNewButton.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
-		btnNewButton.setFont(SWTResourceManager.getFont("Dubai", 14, SWT.BOLD));
+		btnNewButton.setFont(SWTResourceManager.getFont("Arial (Arabic)", 16, SWT.BOLD));
 		btnNewButton.setForeground(SWTResourceManager.getColor(255, 255, 255));
-		btnNewButton.setBounds(251, 251, 117, 35);
+		btnNewButton.setBounds(279, 251, 99, 35);
 		btnNewButton.setText("\u0645\u062A\u0648\u0641\u0631");
-		
-		Button btnNewButton_1 = new Button(shell, SWT.NONE);
-		btnNewButton_1.setBackground(SWTResourceManager.getColor(255, 215, 0));
-		btnNewButton_1.setFont(SWTResourceManager.getFont("Dubai", 14, SWT.BOLD));
-		btnNewButton_1.setForeground(SWTResourceManager.getColor(255, 255, 255));
-		btnNewButton_1.setBounds(116, 251, 121, 35);
-		btnNewButton_1.setText("\u063A\u064A\u0631 \u0645\u062A\u0648\u0641\u0631");
-		
-		Label label_3 = new Label(shell, SWT.NONE);
-		label_3.setImage(SWTResourceManager.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\img\\KaffPlatformheader.jpg"));
-		label_3.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Doaa\\Pictures\\KaffPlatformheade.jpeg"));
-		label_3.setBounds(0, 0, 561, 42);
-		
 
+		Button btnNewButton_1 = new Button(shell, SWT.NONE);
+		btnNewButton_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_GRAY));
+		btnNewButton_1.setFont(SWTResourceManager.getFont("Arial (Arabic)", 16, SWT.BOLD));
+		btnNewButton_1.setForeground(SWTResourceManager.getColor(255, 255, 255));
+		btnNewButton_1.setBounds(152, 251, 99, 35);
+		btnNewButton_1.setText("\u063A\u064A\u0631 \u0645\u062A\u0648\u0641\u0631");
+
+		Label label_3 = new Label(shell, SWT.NONE);
+		label_3.setImage(SWTResourceManager
+				.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\bin\\KaffPlatformheader.jpg"));
+		label_3.setBackgroundImage(SWTResourceManager.getImage("C:\\Users\\Doaa\\Pictures\\KaffPlatformheade.jpeg"));
+		label_3.setBounds(0, 0, 566, 48);
+
+		text_price = new Text(shell, SWT.BORDER | SWT.RIGHT);
+		text_price.setEditable(false);
+		text_price.setBounds(246, 309, 132, 25);
+
+		Button btnNewButton_2 = new Button(shell, SWT.NONE);
+		btnNewButton_2.setBackgroundImage(
+				SWTResourceManager.getImage("C:\\Users\\Doaa\\Pictures\\Picture\\search-icon-.png"));
+		btnNewButton_2.setBackground(SWTResourceManager.getColor(SWT.COLOR_INFO_BACKGROUND));
+		btnNewButton_2.setImage(SWTResourceManager
+				.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\images\\search-icon-.png"));
+
+		btnNewButton_2.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				// search
+				try {
+
+					results = test.get(nkn.getText());
+					numberOfEntries = results.size();
+					if (numberOfEntries != 0) {
+
+						currentEntrieIndex = index;
+						currentEnrty = results.get(currentEntrieIndex);
+						txtEefjn.setText(currentEnrty.BooksTitle);
+						text_level.setText("" + currentEnrty.level);
+						if (currentEnrty.state)
+							btnNewButton.setBackground(SWTResourceManager.getColor(154, 205, 50));
+						else
+							btnNewButton_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_RED));
+						text_price.setText("" + currentEnrty.price);
+						text_type.setText(currentEnrty.For);
+						text_edition.setText(currentEnrty.edition);
+						btnNewButton_3.setEnabled(true);
+						button_1.setEnabled(true);
+
+					}
+
+				} catch (SQLException e1) {
+					System.out.println("Error");
+					ErrorFrame error = new ErrorFrame();
+					error.open();
+					e1.printStackTrace();
+				}
+
+				// error
+			}
+		});
+		btnNewButton_2.setBounds(353, 58, 25, 25);
+
+		Label label_4 = new Label(shell, SWT.NONE);
+		label_4.setFont(SWTResourceManager.getFont("Arial (Arabic)", 16, SWT.NORMAL));
+		label_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		label_4.setAlignment(SWT.RIGHT);
+		label_4.setBounds(426, 410, 88, 38);
+		label_4.setText(":الإصدار");
+
+		Label label_5 = new Label(shell, SWT.NONE);
+		label_5.setFont(SWTResourceManager.getFont("Arial (Arabic)", 16, SWT.NORMAL));
+		label_5.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
+		label_5.setAlignment(SWT.RIGHT);
+		label_5.setBounds(426, 357, 66, 47);
+		label_5.setText(":النوع");
+
+		text_type = new Text(shell, SWT.BORDER | SWT.RIGHT);
+		text_type.setEditable(false);
+		text_type.setBounds(246, 361, 132, 25);
+
+		text_edition = new Text(shell, SWT.BORDER | SWT.RIGHT);
+		text_edition.setEditable(false);
+		text_edition.setBounds(246, 414, 131, 25);
 	}
 }

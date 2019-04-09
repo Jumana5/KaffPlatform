@@ -1,7 +1,6 @@
 package App;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ViewForm;
 import org.eclipse.swt.widgets.Button;
@@ -9,6 +8,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Slider;
 import org.eclipse.swt.widgets.Table;
@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Combo;
@@ -51,6 +52,15 @@ public class BooksDisplayInfoFrame {
 		createContents();
 		shell.open();
 		shell.layout();
+	    Monitor primary = display.getPrimaryMonitor();
+		Rectangle bounds = primary.getBounds();
+		Rectangle rect = shell.getBounds();
+		 int x = bounds.x + (bounds.width - rect.width) / 2;
+		 int y = bounds.y + (bounds.height - rect.height) / 2;
+
+		    /** set the new location */
+		shell.setLocation(x, y);
+		    
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
@@ -104,7 +114,7 @@ public class BooksDisplayInfoFrame {
 		viewForm.setTopRight(borrowedBooksButton);
 		borrowedBooksButton.setText("عرض الكتب المعارة");
 		
-		text = new Text(shell, SWT.BORDER);
+		text = new Text(shell, SWT.BORDER | SWT.RIGHT);
 		text.setBounds(863, 190, 119, 24);
 		
 		Label label = new Label(shell, SWT.NONE);
@@ -113,7 +123,7 @@ public class BooksDisplayInfoFrame {
 		label.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		label.setBounds(1007, 187, 119, 32);
 		
-		text_1 = new Text(shell, SWT.BORDER);
+		text_1 = new Text(shell, SWT.BORDER | SWT.RIGHT);
 		text_1.setBounds(715, 228, 267, 24);
 		
 		Label label_1 = new Label(shell, SWT.NONE);
@@ -122,7 +132,7 @@ public class BooksDisplayInfoFrame {
 		label_1.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		label_1.setBounds(1007, 228, 119, 28);
 		
-		text_2 = new Text(shell, SWT.BORDER);
+		text_2 = new Text(shell, SWT.BORDER | SWT.RIGHT);
 		text_2.setBounds(863, 274, 119, 24);
 		
 		Label label_2 = new Label(shell, SWT.NONE);
@@ -182,7 +192,7 @@ public class BooksDisplayInfoFrame {
 		label_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_WHITE));
 		label_4.setBounds(1007, 484, 119, 28);
 		
-		text_3 = new Text(shell, SWT.BORDER);
+		text_3 = new Text(shell, SWT.BORDER | SWT.RIGHT);
 		text_3.setBounds(918, 487, 64, 24);
 		
 		Button backBtn = new Button(shell, SWT.NONE);
@@ -200,6 +210,12 @@ public class BooksDisplayInfoFrame {
 		editBtn.setBounds(839, 551, 76, 35);
 		
 		Button cancelBtn = new Button(shell, SWT.NONE);
+		cancelBtn.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//empty all text fields..
+			}
+		});
 		cancelBtn.setText("إلغاء");
 		cancelBtn.setForeground(SWTResourceManager.getColor(255, 255, 255));
 		cancelBtn.setFont(SWTResourceManager.getFont("Dubai", 13, SWT.BOLD));
@@ -230,6 +246,18 @@ public class BooksDisplayInfoFrame {
 		deleteBtn.setFont(SWTResourceManager.getFont("Dubai", 13, SWT.BOLD));
 		deleteBtn.setBackground(SWTResourceManager.getColor(128, 128, 128));
 		deleteBtn.setBounds(933, 551, 76, 35);
+		
+		Button button_5 = new Button(shell, SWT.NONE);
+		button_5.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MainMenuKaff mm = new MainMenuKaff();
+				mm.open();
+				
+			}
+		});
+		button_5.setImage(SWTResourceManager.getImage("C:\\Users\\al5an\\git\\KaffPlatform\\KaffPlatformProject\\bin\\logo for header button.png"));
+		button_5.setBounds(1087, 0, 87, 50);
 
 	
 
@@ -246,52 +274,55 @@ public class BooksDisplayInfoFrame {
 		
 		String bookQuery = "select * from kaff.book";
 		
-		TableColumn bookIDCol = new TableColumn(booksTable, SWT.LEFT);
-		TableColumn bookTitleCol = new TableColumn(booksTable, SWT.LEFT);
-		TableColumn bookTypeCol = new TableColumn(booksTable, SWT.LEFT);
-		TableColumn bookPriceCol = new TableColumn(booksTable, SWT.LEFT);
-		TableColumn bookAvaCol = new TableColumn(booksTable, SWT.LEFT);
-		TableColumn bookEdCol = new TableColumn(booksTable, SWT.LEFT);
+		TableColumn bookIDCol = new TableColumn(booksTable, SWT.RIGHT);
+		TableColumn bookTitleCol = new TableColumn(booksTable, SWT.RIGHT);
+		TableColumn bookTypeCol = new TableColumn(booksTable, SWT.RIGHT);
+		TableColumn bookPriceCol = new TableColumn(booksTable, SWT.RIGHT);
+		TableColumn bookAvaCol = new TableColumn(booksTable, SWT.RIGHT);
+		TableColumn bookEdCol = new TableColumn(booksTable, SWT.RIGHT);
 		
 		bookIDCol.setText("رمز الكتاب");
 		bookTitleCol.setText("عنوان الكتاب");
 		bookTypeCol.setText("النوع");
-		bookAvaCol.setText("الإتاحة");
 		bookPriceCol.setText("سعر الكتاب");
+		bookAvaCol.setText("الإتاحة");
 		bookEdCol.setText("الإصدار");
 		
-		bookIDCol.setWidth(70);
-		bookTitleCol.setWidth(100);
-		bookTypeCol.setWidth(70);
-		bookPriceCol.setWidth(80);
-		bookAvaCol.setWidth(60);
-		bookEdCol.setWidth(70);
+		bookIDCol.setWidth(100);
+		bookTitleCol.setWidth(140);
+		bookTypeCol.setWidth(100);
+		bookPriceCol.setWidth(100);
+		bookAvaCol.setWidth(100);
+		bookEdCol.setWidth(100);
 		booksTable.setItemCount(4);
 		
 		booksTable.addListener(SWT.SetData, new Listener(){
 			public void handleEvent(Event event){
-				TableItem item = (TableItem) event.item;
 
 				try {
 					Database.openConnection();
 					ResultSet resultSet = Database.getStatment().executeQuery(bookQuery);
 					int count = resultSet.getMetaData().getColumnCount();
-				        while (resultSet.next()) {
+					TableItem item ;
+    
+					while (resultSet.next()) {
 				            // Create a new TableItem for each entry in the result set (each row)
 				            item = new TableItem(booksTable, SWT.NONE);
-				            for (int i = 1; i <= count; i++) {
-				                // Populate the item (mind the index!!)
-				                item.setText(i - 1, resultSet.getString(i));
-				            }
-				        }
-//					while(resultSet.next()){
-//						item.setText(new String[] {resultSet.getString(1), 
-//								resultSet.getString(2),
-//								resultSet.getString(3),
-//								resultSet.getString(4),
-//								resultSet.getString(5),
-//								resultSet.getString(6)});
-//					}
+//				            for (int i = 1; i <= count; i++){
+//				                // Populate the item (mind the index!!)
+//				            	System.out.println(resultSet.getString(i));
+//				                item.setText(resultSet.getString(i));
+//				            }
+				                
+				                item.setText(new String[] {resultSet.getString(1), 
+								resultSet.getString(2),
+								resultSet.getString(3),
+								resultSet.getString(4),
+								resultSet.getString(5),
+								resultSet.getString(6)});
+				            if(booksTable.dragDetect(event)){}
+					}
+					
 					Database.closeConnection();
 
 				} catch (SQLException e) {
@@ -312,5 +343,4 @@ public class BooksDisplayInfoFrame {
 //		bookStatement.setBoolean(5, available);
 //		bookStatement.setString(6, edition);
 	}
-
 }
