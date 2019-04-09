@@ -114,7 +114,9 @@ public class SignInFrame {
 		passwordLabel.setBounds(364, 206, 94, 24);
 		passwordLabel.setText("الرقم السري");
 
-		passwordValue = new Text(shell, SWT.BORDER);
+		passwordValue = new Text(shell, SWT.SINGLE | SWT.BORDER | SWT.PASSWORD);
+		// Set echo char.
+		passwordValue.setEchoChar('*');
 
 		passwordValue.setBounds(111, 206, 247, 24);
 
